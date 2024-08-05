@@ -71,6 +71,12 @@ app.use(makanan)
 // riwayat_pencarian route
 var riwayat_pencarian = require('./router/riwayat_pencarian.routes.js')
 app.use(riwayat_pencarian)
+// target_kalori route
+var target_kalori = require('./router/target_kalori.routes.js')
+app.use(target_kalori)
+// asupan_harian route
+var asupan_harian = require('./router/asupan_harian.routes.js')
+app.use(asupan_harian)
 
 // server
 var port = process.env.PORT || 3000
