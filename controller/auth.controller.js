@@ -200,13 +200,7 @@ exports.login = (req, res) => {
             .where('email', '==', username)
             .get()
             .then((doc)=>{
-                if(doc.empty){
-                    return res.status(500).json({
-                        error: true,
-                        message: 'Username atau Email tidak terdaftar'
-                    })
-                }
-                else {
+                if(!doc.empty){
                     data = doc.docs[0].data()
                 }
             })
@@ -230,13 +224,15 @@ exports.login = (req, res) => {
             }else{
                 return res.status(500).json({
                     error: true,
-                    message: 'Password salah'
+                    message: 'Password salah',
+                    token: null
                 })
             }
         } else {
             return res.status(500).json({
                 error: true,
-                message: 'Username atau Email tidak terdaftar'
+                message: 'Username atau Email tidak terdaftar',
+                token: null
             })
         }
     })
