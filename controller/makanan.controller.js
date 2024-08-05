@@ -50,7 +50,6 @@ exports.getTop = (req, res) => {
 // get makanan by id
 exports.getById = (req, res) => {
     var id = req.params.id
-    console.log(id)
     db.collection('makanan')
     .doc(id)
     .get()
@@ -137,7 +136,6 @@ exports.search = (req, res) => {
         .then((snapshot)=>{
             snapshot.forEach((doc)=>{
                 makanan.push(doc.data())
-                console.log(doc.data())
             })
             if (makanan.length == 0) {
                 res.status(200).json({
