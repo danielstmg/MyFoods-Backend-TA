@@ -102,12 +102,24 @@ exports.getAsupanHarianByHari = (req, res) => {
                 doc.forEach((asupan)=>{
                     asupan_harian.push(asupan.data())
                 })
+
+                var total_calories = 0
+                for (var i = 0; i < asupan_harian.length; i++){
+                    if (asupan_harian[i].is_healthy == 0){
+                        total_calories += asupan_harian[i].calories
+                        console.log(asupan_harian[i].calories)
+                    } else {
+                        total_calories += asupan_harian[i].healthy_calories
+                        console.log(asupan_harian[i].healthy_calories)
+                    }
+                }
+                console.log(total_calories)
+
                 return res.status(200).json({
                     error: false,
                     message: 'Success',
                     data: asupan_harian,
-                    total_calories: asupan_harian.reduce((a, b) => a + b.calories, 0),
-                    total_healthy_calories: asupan_harian.reduce((a, b) => a + b.healthy_calories, 0)
+                    total_calories: total_calories
                 })
             }
         })
@@ -124,6 +136,7 @@ exports.getAsupanHarianByHari = (req, res) => {
 exports.addAsupanHarian = (req, res) => {
     authenticateToken(req, res, ()=>{
         var makanan = req.body
+        makanan.jumlah_porsi = parseInt(makanan.jumlah_porsi)
         db.collection('makanan')
         .doc(makanan.id_makanan)
         .get()
@@ -141,6 +154,7 @@ exports.addAsupanHarian = (req, res) => {
                     "jenis_asupan": makanan.jenis_asupan,
                     "id_makanan": makanan.id_makanan,
                     "jumlah_porsi": makanan.jumlah_porsi,
+                    "is_healthy": 0,
                     "calories": doc.data().calories * makanan.jumlah_porsi,
                     "healthy_calories": doc.data().healthyCalories * makanan.jumlah_porsi,
                 }
@@ -194,10 +208,9 @@ exports.getAsupanHarianById = (req, res) => {
     })
 }
 
-// update asupan harian user by id
-exports.updateAsupanHarian = (req, res) => {
+// update is_healthy asupan harian user by id
+exports.updateIsHealthy = (req, res) => {
     authenticateToken(req, res, ()=>{
-        var makanan = req.body
         db.collection('asupan_harian')
         .doc(req.params.id)
         .get()
@@ -208,7 +221,45 @@ exports.updateAsupanHarian = (req, res) => {
                     message: 'Asupan harian tidak ditemukan'
                 })
             } else {
-                var hari = doc.data().hari
+                let asupan = doc.data()
+                asupan.is_healthy = parseInt(req.body.is_healthy)
+                db.collection('asupan_harian')
+                .doc(req.params.id)
+                .update(asupan)
+                .then(()=>{
+                    return res.status(200).json({
+                        error: false,
+                        message: 'Asupan harian berhasil diupdate',
+                        data: asupan
+                    })
+                })
+                .catch((err)=>{
+                    return res.status(500).json({
+                        error: true,
+                        message: err.message
+                    })
+                })
+            }
+        })
+    })
+}
+
+// update asupan harian user by id
+exports.updateAsupanHarian = (req, res) => {
+    authenticateToken(req, res, ()=>{
+        var makanan = req.body
+        makanan.jumlah_porsi = parseInt(makanan.jumlah_porsi)
+        db.collection('asupan_harian')
+        .doc(req.params.id)
+        .get()
+        .then((doc)=>{
+            if(!doc.exists){
+                return res.status(200).json({
+                    error: true,
+                    message: 'Asupan harian tidak ditemukan'
+                })
+            } else {
+                var pastData = doc.data()
                 db.collection('makanan')
                 .doc(makanan.id_makanan)
                 .get()
@@ -221,10 +272,11 @@ exports.updateAsupanHarian = (req, res) => {
                     } else {
                         let asupan = {
                             "id_user": req.user.uid,
-                            "hari": hari,
+                            "hari": pastData.hari,
                             "jenis_asupan": makanan.jenis_asupan,
                             "id_makanan": makanan.id_makanan,
                             "jumlah_porsi": makanan.jumlah_porsi,
+                            "is_healthy": pastData.is_healthy,
                             "calories": doc.data().calories * makanan.jumlah_porsi,
                             "healthy_calories": doc.data().healthyCalories * makanan.jumlah_porsi,
                         }

@@ -16,6 +16,9 @@ router.post('/asupan_harian/:hari', AsupanHarian.addAsupanHarian)
 // get asupan harian user by id
 router.get('/asupan_harian/id/:id', AsupanHarian.getAsupanHarianById)
 
+// update is_healthy asupan harian user by id
+router.put('/asupan_harian/is_healthy/:id', AsupanHarian.updateIsHealthy)
+
 // update asupan harian user by id
 router.put('/asupan_harian/id/:id', AsupanHarian.updateAsupanHarian)
 
