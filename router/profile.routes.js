@@ -17,7 +17,7 @@ router.put('/profile/password', Profile.updatePassword)
 router.put('/profile/photo', Profile.updatePhoto)
 
 // delete profile photo
-router.delete('/profile/photo', Profile.deletePhoto)
+// router.delete('/profile/photo', Profile.deletePhoto)
 
 // delete profile
 router.delete('/profile', Profile.deleteProfile)

@@ -2,10 +2,10 @@ var router = require('express').Router()
 var AsupanHarian = require('../controller/asupan_harian.controller')
 
 // get all asupan harian
-router.get('/all_asupan_harian', AsupanHarian.getAllAsupanHarian)
+// router.get('/all_asupan_harian', AsupanHarian.getAllAsupanHarian)
 
 // get asupan harian user
-router.get('/asupan_harian', AsupanHarian.getAsupanHarian)
+// router.get('/asupan_harian', AsupanHarian.getAsupanHarian)
 
 // get asupan harian user by hari
 router.get('/asupan_harian/:hari', AsupanHarian.getAsupanHarianByHari)
@@ -17,10 +17,10 @@ router.post('/asupan_harian/:hari', AsupanHarian.addAsupanHarian)
 router.get('/asupan_harian/id/:id', AsupanHarian.getAsupanHarianById)
 
 // update is_healthy asupan harian user by id
-router.put('/asupan_harian/is_healthy/:id', AsupanHarian.updateIsHealthy)
+// router.put('/asupan_harian/is_healthy/:id', AsupanHarian.updateIsHealthy)
 
 // update asupan harian user by id
-router.put('/asupan_harian/id/:id', AsupanHarian.updateAsupanHarian)
+// router.put('/asupan_harian/id/:id', AsupanHarian.updateAsupanHarian)
 
 // delete asupan harian user by id
 router.delete('/asupan_harian/id/:id', AsupanHarian.deleteAsupanHarian)
